@@ -9,13 +9,13 @@ on:
   workflow_dispatch:
 
 env:
-  APP=legal-term-api
-  VER=latest
-  REG=trtestreg.azurecr.io
-  AZ_TENANT=ec44ec06-9344-4a84-b3fe-8f38e070305e
-  AZ_SUB=ed407654-54f5-428f-8e6d-d7d484c844fe
-  AZ_RG=trtest
-  AZ_CLUSTER=trtestaks
+  APP: legal-term-api
+  VER: latest
+  REG: trtestreg.azurecr.io
+  AZ_TENANT: ec44ec06-9344-4a84-b3fe-8f38e070305e
+  AZ_SUB: ed407654-54f5-428f-8e6d-d7d484c844fe
+  AZ_RG: trtest
+  AZ_CLUSTER: trtestaks
 
 jobs:
   build:
