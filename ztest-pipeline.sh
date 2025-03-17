@@ -46,7 +46,6 @@ podman push ${REG}/$APP:$VER
 az login --service-principal -u $AZ_ID -p $AZ_SECRET --tenant $AZ_TENANT
 az account set --subscription $AZ_SUB
 az aks get-credentials --resource-group $AZ_RG --name $AZ_CLUSTER --overwrite-existing
-kubectl config use-context trtest-cluster
 
 # ASSUMPTION: the ingress controller is already installed
 # if not, use something like this:

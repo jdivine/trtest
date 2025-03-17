@@ -35,6 +35,12 @@ jobs:
           docker build --tag $REG/$APP:$VER .
           docker login -u ${REG_USER} -p ${REG_PASS} ${REG}
           docker push ${REG}/$APP:$VER
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Deploy to Kubernetes
         run: |
-          echo something
+          az login --service-principal -u $AZ_ID -p $AZ_SECRET --tenant $AZ_TENANT
+          az account set --subscription $AZ_SUB
+          az aks get-credentials --resource-group $AZ_RG --name $AZ_CLUSTER --overwrite-existing
