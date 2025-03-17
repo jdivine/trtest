@@ -48,6 +48,8 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - uses: azure/use-kubelogin@v1
+        with:
+          kubelogin-version: 'v0.0.24'
       - uses: azure/setup-kubectl@v3
       - name: Deploy to Kubernetes
         run: |
