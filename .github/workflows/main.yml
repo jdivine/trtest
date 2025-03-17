@@ -1,0 +1,29 @@
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: Get python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+      - name: Get poetry
+        uses: snok/install-poetry@v1
+      - name: Poetry install
+        run: |
+          poetry install --no-interaction --no-root
+      - name: Run tests
+        run: |
+          poetry run python -m pytest
