@@ -47,6 +47,8 @@ jobs:
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - uses: azure/use-kubelogin@v1
+      - uses: azure/setup-kubectl@v3
       - name: Deploy to Kubernetes
         run: |
           az account set --subscription $AZ_SUB
