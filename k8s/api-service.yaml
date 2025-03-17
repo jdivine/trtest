@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: legal-term-api
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  selector:
+    app: legal-term-api
+  type: ClusterIP

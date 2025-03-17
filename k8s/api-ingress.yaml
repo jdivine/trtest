@@ -1,0 +1,29 @@
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: legal-term-api
+spec:
+  ingressClassName: nginx
+  defaultBackend:
+    service:
+      name: legal-term-api
+      port:
+        number: 80
+  # rules:
+  #   - host: "trtest.net"
+  #     http:
+  #       paths:
+  #         - path: /terms
+  #           pathType: Prefix
+  #           backend:
+  #             service:
+  #               name: legal-term-api
+  #               port:
+  #                 number: 80
+  #         - path: /definitions
+  #           pathType: Prefix
+  #           backend:
+  #             service:
+  #               name: legal-term-api
+  #               port:
+  #                 number: 80
