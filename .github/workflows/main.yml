@@ -32,10 +32,9 @@ jobs:
           REG_USER: ${{ secrets.REG_USER }}
           REG_PASS: ${{ secrets.REG_PASS }}
         run: |
-          echo $REG_USER
-      - name: catch error
-        run: |
-          cat /tmp/file_not_exist
+          docker build --tag $REG/$APP:$VER .
+          docker login -u ${REG_USER} -p ${REG_PASS} ${REG}
+          docker push ${REG}/$APP:$VER
       - name: Deploy to Kubernetes
         run: |
           echo something
