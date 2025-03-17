@@ -27,3 +27,15 @@ jobs:
       - name: Run tests
         run: |
           poetry run python -m pytest
+      - name: Build and push container
+        env:
+          REG_USER: ${{ secrets.REG_USER }}
+          REG_PASS: ${{ secrets.REG_PASS }}
+        run: |
+          echo $REG_USER
+      - name: catch error
+        run: |
+          cat /tmp/file_not_exist
+      - name: Deploy to Kubernetes
+        run: |
+          echo something
