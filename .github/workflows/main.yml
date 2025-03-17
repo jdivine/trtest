@@ -51,3 +51,10 @@ jobs:
         run: |
           az account set --subscription $AZ_SUB
           az aks get-credentials --resource-group $AZ_RG --name $AZ_CLUSTER --overwrite-existing
+          kubectl get namespace ${APP} || kubectl create namespace ${APP}
+          kubectl apply -f k8s/api-deployment.yaml -n ${APP}
+          kubectl wait --for=condition=available --timeout=60s deployment/${APP} -n ${APP}
+          kubectl apply -f k8s/api-service.yaml -n ${APP}
+          kubectl apply -f k8s/api-ingressclass.yaml -n ${APP}
+          kubectl apply -f k8s/api-ingress.yaml -n ${APP}
+          kubectl apply -f k8s/api-hpa.yaml -n ${APP}
