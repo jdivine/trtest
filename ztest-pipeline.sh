@@ -15,10 +15,11 @@ AZ_SUB=ed407654-54f5-428f-8e6d-d7d484c844fe
 AZ_RG=trtest
 AZ_CLUSTER=trtestaks
 
+# Secrets - define and load from .env file which must be sourced before running this script
 REG_USER=$REG_USER
-REG_PASS=$REG_PASS # load from .env file
+REG_PASS=$REG_PASS
 AZ_ID=$AZ_ID # trtest-aks-admin
-AZ_SECRET=$AZ_SECRET # load from .env file
+AZ_SECRET=$AZ_SECRET
 
 # system dependencies
 # sudo apt install python3-pip
