@@ -9,16 +9,17 @@
 
 APP=legal-term-api
 VER=latest
-REG_USER=trtest-user
 REG=trtestreg.azurecr.io
 AZ_TENANT=ec44ec06-9344-4a84-b3fe-8f38e070305e
 AZ_SUB=ed407654-54f5-428f-8e6d-d7d484c844fe
-AZ_ID=f5897f6c-9b3f-4f02-9534-6d8611b423f3 # trtest-aks-admin
 AZ_RG=trtest
 AZ_CLUSTER=trtestaks
 
-REG_PASS=$REG_PASS # load from .env file
-AZ_SECRET=$AZ_SECRET # load from .env file
+# Secrets - define and load from .env file which must be sourced before running this script
+REG_USER=$REG_USER
+REG_PASS=$REG_PASS
+AZ_ID=$AZ_ID # trtest-aks-admin
+AZ_SECRET=$AZ_SECRET
 
 # system dependencies
 # sudo apt install python3-pip
@@ -46,7 +47,6 @@ podman push ${REG}/$APP:$VER
 az login --service-principal -u $AZ_ID -p $AZ_SECRET --tenant $AZ_TENANT
 az account set --subscription $AZ_SUB
 az aks get-credentials --resource-group $AZ_RG --name $AZ_CLUSTER --overwrite-existing
-kubectl config use-context trtest-cluster
 
 # ASSUMPTION: the ingress controller is already installed
 # if not, use something like this:

@@ -1,0 +1,64 @@
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+  workflow_dispatch:
+
+env:
+  APP: legal-term-api
+  VER: latest
+  REG: trtestreg.azurecr.io
+  AZ_TENANT: ec44ec06-9344-4a84-b3fe-8f38e070305e
+  AZ_SUB: ed407654-54f5-428f-8e6d-d7d484c844fe
+  AZ_RG: trtest
+  AZ_CLUSTER: trtestaks
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: Get python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+      - name: Get poetry
+        uses: snok/install-poetry@v1
+      - name: Poetry install
+        run: |
+          poetry install --no-interaction --no-root
+      - name: Run tests
+        run: |
+          poetry run python -m pytest
+      - name: Build and push container
+        env:
+          REG_USER: ${{ secrets.REG_USER }}
+          REG_PASS: ${{ secrets.REG_PASS }}
+        run: |
+          docker build --tag $REG/$APP:$VER .
+          docker login -u ${REG_USER} -p ${REG_PASS} ${REG}
+          docker push ${REG}/$APP:$VER
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - uses: azure/use-kubelogin@v1
+        with:
+          kubelogin-version: 'v0.0.24'
+      - uses: azure/setup-kubectl@v3
+      - name: Deploy to Kubernetes
+        run: |
+          az account set --subscription $AZ_SUB
+          az aks get-credentials --resource-group $AZ_RG --name $AZ_CLUSTER --overwrite-existing --admin
+          kubectl get namespace ${APP} || kubectl create namespace ${APP}
+          kubectl apply -f k8s/api-deployment.yaml -n ${APP}
+          kubectl wait --for=condition=available --timeout=60s deployment/${APP} -n ${APP}
+          kubectl apply -f k8s/api-service.yaml -n ${APP}
+          kubectl apply -f k8s/api-ingressclass.yaml -n ${APP}
+          kubectl apply -f k8s/api-ingress.yaml -n ${APP}
+          kubectl apply -f k8s/api-hpa.yaml -n ${APP}
