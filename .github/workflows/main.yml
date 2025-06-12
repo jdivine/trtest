@@ -44,7 +44,7 @@ jobs:
           git branch --show-current
           gh pr checkout ${{ github.event.number }}
           git branch --show-current
-          
+
       - name: Debug information - PR comment
         if: github.event_name == 'issue_comment' && github.event.issue.pull_request != null
         run: |
@@ -60,6 +60,18 @@ jobs:
           echo "***********************************"
           echo '${{ toJSON(github.event) }}'
 
+      - name: Debug information - PR
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "IS_PR: ${{ github.event.pull_request != null }}"
+          echo "event.action is ${{ github.event.action }}" # should be 'opened', 'synchronize', or 'reopened' for PRs
+          echo "event number is ${{ github.event.number }}"
+          echo "event repository is ${{ github.event.repository.name }}"
+          echo "pr base branch is ${{ github.event.pull_request.base.ref }}"
+          echo "pr head branch is ${{ github.event.pull_request.head.ref }}"
+          echo "sender is ${{ github.event.sender.login }}"
+          echo "***********************************"
+          echo '${{ toJSON(github.event) }}'
 
 
 
