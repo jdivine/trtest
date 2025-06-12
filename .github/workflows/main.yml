@@ -42,7 +42,7 @@ jobs:
         if: github.event_name == 'issue_comment' && github.event.issue.pull_request != null
         run: |
           git branch --show-current
-          gh pr checkout ${{ github.event.number }}
+          gh pr checkout ${{ github.event.issue.number }}
           git branch --show-current
         env:
           GH_TOKEN: ${{ github.token }}
