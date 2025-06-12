@@ -56,8 +56,6 @@ jobs:
           echo "event action is ${{ github.event.action }}" # should be 'created' or 'edited' for PR comments
           echo "event number is ${{ github.event.number }}"
           echo "event repository is ${{ github.event.repository.name }}"
-          echo "pr base branch is ${{ github.event.pull_request.base.ref }}"
-          echo "pr head branch is ${{ github.event.pull_request.head.ref }}"
           echo "sender is ${{ github.event.sender.login }}"
           echo "***********************************"
           echo '${{ toJSON(github.event) }}'
