@@ -38,18 +38,24 @@ jobs:
           fetch-depth: 0  # Fetch all history for all branches and tags
           ref: ${{ github.ref }}  # Use the ref that triggered the workflow
 
-      - name: Debug information
+      - name: Checkout PR associated with comment
+        if: github.event_name == 'issue_comment' && github.event.issue.pull_request != null
+        run: |
+          git branch --show-current
+          gh pr checkout ${{ github.event.number }}
+          git branch --show-current
+          
+      - name: Debug information - PR comment
+        if: github.event_name == 'issue_comment' && github.event.issue.pull_request != null
         run: |
           echo "IS_PR_COMMENT: ${{ github.event.issue.pull_request != null }}"
-          echo "issue.pull_request: ${{ toJSON(github.event.issue.pull_request) }}"
-          echo "pr number ${{ github.event.pull_request.number }}"
-          echo "pr title ${{ github.event.pull_request.title }}"
+          echo "event.issue.number: ${{ toJSON(github.event.issue.number) }}"
+          echo "event.issue.title: ${{ github.event.issue.title }}"
           echo "event action is ${{ github.event.action }}" # should be 'created' or 'edited' for PR comments
           echo "event number is ${{ github.event.number }}"
           echo "event repository is ${{ github.event.repository.name }}"
           echo "pr base branch is ${{ github.event.pull_request.base.ref }}"
           echo "pr head branch is ${{ github.event.pull_request.head.ref }}"
-          echo "pr labels are ${{ toJSON(github.event.pull_request.labels) }}"
           echo "sender is ${{ github.event.sender.login }}"
           echo "***********************************"
           echo '${{ toJSON(github.event) }}'
