@@ -36,7 +36,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Fetch all history for all branches and tags
-          ref: ${{ github.ref }}  # Use the ref that triggered the workflow
 
       - name: Checkout PR associated with comment
         if: github.event_name == 'issue_comment' && github.event.issue.pull_request != null
