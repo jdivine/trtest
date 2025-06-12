@@ -34,6 +34,10 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
+          ref: ${{ github.ref }}  # Use the ref that triggered the workflow
+
       - name: Debug information
         run: |
           echo "IS_PR_COMMENT: ${{ github.event.issue.pull_request != null }}"
