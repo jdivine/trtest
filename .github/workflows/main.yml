@@ -68,8 +68,9 @@ jobs:
           if [[ $COMMENT_BODY =~ "^terraform (\w+) (\w+)" ]]; then
             ACTION="${BASH_REMATCH[1]}"
             ENV="${BASH_REMATCH[2]}"
-            echo "ACTION=$ACTION" >> $GITHUB_ENV
-            echo "ENV=$ENV" >> $GITHUB_ENV
+            echo "ACTION=$ACTION" >> "$GITHUB_ENV"
+            echo "ENV=$ENV" >> "$GITHUB_ENV"
+            echo "match $ACTION $ENV"
           fi
         env:
           COMMENT_BODY: ${{ github.event.comment.body }}
@@ -79,9 +80,9 @@ jobs:
 
       - name: Debug - use environment variables
         run: |
-          echo "ACTION is ${{ env.ACTION }}"
-          echo "ENV is ${{ env.ENV }}"
-          
+          echo "ACTION is $ACTION"
+          echo "ENV is $ENV"
+
       - name: Debug information - PR open/update/reopen
         if: github.event_name == 'pull_request'
         run: |
