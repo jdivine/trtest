@@ -36,7 +36,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Fetch all history for all branches and tags
-          ref: ${{ github.ref }}  # Use the ref that triggered the workflow
 
       - name: Checkout PR associated with comment
         if: github.event_name == 'issue_comment' && github.event.issue.pull_request != null
@@ -54,13 +53,18 @@ jobs:
           echo "event.issue.number: ${{ toJSON(github.event.issue.number) }}"
           echo "event.issue.title: ${{ github.event.issue.title }}"
           echo "event action is ${{ github.event.action }}" # should be 'created' or 'edited' for PR comments
-          echo "event number is ${{ github.event.number }}"
           echo "event repository is ${{ github.event.repository.name }}"
           echo "sender is ${{ github.event.sender.login }}"
           echo "***********************************"
-          echo '${{ toJSON(github.event) }}'
+        # echo '${{ toJSON(github.event) }}'
 
-      - name: Debug information - PR
+      - name: Conditional step - PR comment
+        if: github.event_name == 'issue_comment' && github.event.issue.pull_request != null && github.event.action == 'created'
+        run: |
+          echo "This step runs only for newly created PR comments."
+          echo "You can add your custom logic here."
+
+      - name: Debug information - PR open/update/reopen
         if: github.event_name == 'pull_request'
         run: |
           echo "IS_PR: ${{ github.event.pull_request != null }}"
@@ -71,8 +75,13 @@ jobs:
           echo "pr head branch is ${{ github.event.pull_request.head.ref }}"
           echo "sender is ${{ github.event.sender.login }}"
           echo "***********************************"
-          echo '${{ toJSON(github.event) }}'
+        # echo '${{ toJSON(github.event) }}'
 
+      - name: Conditional step - PR open/update/reopen
+        if: github.event_name == 'pull_request' 
+        run: |
+          echo "This step runs only for newly opened, updated, or reopened PRs."
+          echo "You can add your custom logic here."
 
 
       # - name: Get python
