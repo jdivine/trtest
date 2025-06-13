@@ -65,12 +65,11 @@ jobs:
           script: |
             const fs = require('fs');
 
-            const str = "one two three";
             const commentBody = context.payload.comment.body;
             console.log("Comment Body :", commentBody);
             const pattern = /^(terraform) (\w+) (\w+)/;
 
-            const match = str.match(pattern);
+            const match = commentBody.match(pattern);
             if (match) {
               console.log("Full match :", match[0]);
 
