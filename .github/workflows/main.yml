@@ -65,12 +65,23 @@ jobs:
           echo "You can add your custom logic here."
           echo "The comment body is: ${{ github.event.comment.body }}"
           echo "The COMMENT_BODY is: ${{ env.COMMENT_BODY }}"
+          if [[ $COMMENT_BODY =~ "^terraform (\w+) (\w+)" ]]; then
+            ACTION="${BASH_REMATCH[1]}"
+            ENV="${BASH_REMATCH[2]}"
+            echo "ACTION=$ACTION" >> $GITHUB_ENV
+            echo "ENV=$ENV" >> $GITHUB_ENV
+          fi
         env:
           COMMENT_BODY: ${{ github.event.comment.body }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           REPO_NAME: ${{ github.event.repository.name }}
           SENDER: ${{ github.event.sender.login }}
 
+      - name: Debug - use environment variables
+        run: |
+          echo "ACTION is ${{ env.ACTION }}"
+          echo "ENV is ${{ env.ENV }}"
+          
       - name: Debug information - PR open/update/reopen
         if: github.event_name == 'pull_request'
         run: |
